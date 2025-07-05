@@ -14,6 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Bar, BarChart, Line, LineChart, Pie, PieChart, Cell, XAxis, YAxis, CartesianGrid } from "recharts"
 import { AlertTriangle, Clock, DollarSign, TrendingUp, FileText, Upload, Search, Filter } from "lucide-react"
+import { AIInsightsPanel, type AIInsights } from "@/components/ai-insights-panel"
 
 // Tipo para los tickets
 type Ticket = {
@@ -184,6 +185,8 @@ export default function TicketAnalyticsApp() {
   const [filteredTickets, setFilteredTickets] = useState<Ticket[]>(mockTickets)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  const [aiInsights, setAiInsights] = useState<AIInsights | null>(null)
+  const [isGeneratingInsights, setIsGeneratingInsights] = useState(false)
   const [alerts] = useState([
     {
       id: 1,
@@ -316,6 +319,36 @@ export default function TicketAnalyticsApp() {
     }
     
     reader.readAsText(file)
+  }
+
+  const generateAIInsights = async () => {
+    if (tickets.length === 0) {
+      alert('No hay tickets para analizar. Por favor, importa datos primero.')
+      return
+    }
+
+    setIsGeneratingInsights(true)
+    try {
+      const response = await fetch('/api/analyze-tickets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tickets }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al generar insights')
+      }
+
+      const data = await response.json()
+      setAiInsights(data.insights)
+    } catch (error) {
+      console.error('Error generating AI insights:', error)
+      alert('Error al generar insights con IA. Verifica tu conexión y configuración.')
+    } finally {
+      setIsGeneratingInsights(false)
+    }
   }
 
   return (
@@ -632,6 +665,13 @@ export default function TicketAnalyticsApp() {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-4">
+            {/* AI Insights Panel */}
+            <AIInsightsPanel 
+              insights={aiInsights}
+              isLoading={isGeneratingInsights}
+              onGenerateInsights={generateAIInsights}
+            />
+            
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <Card>
                 <CardHeader>
