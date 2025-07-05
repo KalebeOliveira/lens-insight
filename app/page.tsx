@@ -59,130 +59,175 @@ type Ticket = {
 }
 
 // Mock data para demostración
-const mockTickets: Ticket[] = [
-  {
-    id: "TKT-001",
-    parentServiceRequest: "SR-2024-001",
-    status: "Resolved",
-    user: "Juan Pérez",
-    contactType: "Email",
-    service: "Email Service",
-    configurationItem: "Exchange Server",
-    category: "Infrastructure",
-    subCategory: "Email Issues",
-    causedByChange: "No",
-    impact: "High",
-    urgency: "High",
-    assignmentGroup: "IT Support L2",
-    assignedTo: "María García",
-    itCrisis: "No",
-    supplier: "Microsoft",
-    externalReference: "MS-2024-001",
-    shortDescription: "Email server down",
-    description: "Users cannot access email services",
-    closeCode: "Resolved",
-    closureNotes: "Server restarted successfully",
-    workNotes: "Investigated server logs",
-    additionalComments: "Monitor for 24h",
-    opened: "2024-01-15T09:00:00Z",
-    openedBy: "System Monitor",
-    resolved: "2024-01-15T11:30:00Z",
-    resolvedBy: "María García",
-    watchList: "IT Management",
-    correlationId: "CORR-001",
-    sapImplementationStatus: "N/A",
-    followUp: "No",
-    threeStrikeRule: "Strike 1",
-    dueDate: "2024-01-15T17:00:00Z",
-    reasonForWaiting: "N/A",
-    actionsTaken: "Server restart, monitoring enabled",
-    active: "No",
-    resolutionTime: 2.5,
-    cost: 150,
-  },
-  {
-    id: "TKT-002",
-    parentServiceRequest: "SR-2024-002",
-    status: "In Progress",
-    user: "Ana López",
-    contactType: "Phone",
-    service: "Network Service",
-    configurationItem: "Core Switch",
-    category: "Infrastructure",
-    subCategory: "Network Connectivity",
-    causedByChange: "Yes",
-    impact: "Medium",
-    urgency: "Medium",
-    assignmentGroup: "Network Team",
-    assignedTo: "Carlos Ruiz",
-    itCrisis: "No",
-    supplier: "Cisco",
-    externalReference: "CISCO-2024-002",
-    shortDescription: "Network connectivity issues",
-    description: "Intermittent network connectivity in Building A",
-    closeCode: "",
-    closureNotes: "",
-    workNotes: "Investigating switch configuration",
-    additionalComments: "Affecting 50 users",
-    opened: "2024-01-16T14:00:00Z",
-    openedBy: "Ana López",
-    resolved: "",
-    resolvedBy: "",
-    watchList: "Network Management",
-    correlationId: "CORR-002",
-    sapImplementationStatus: "N/A",
-    followUp: "Yes",
-    threeStrikeRule: "No strikes",
-    dueDate: "2024-01-17T14:00:00Z",
-    reasonForWaiting: "Vendor response",
-    actionsTaken: "Initial diagnosis completed",
-    active: "Yes",
-    resolutionTime: 0,
-    cost: 0,
-  },
-]
+// const mockTickets: Ticket[] = [
+//   // {
+//   //   id: "TKT-001",
+//   //   parentServiceRequest: "SR-2024-001",
+//   //   status: "Resolved",
+//   //   user: "Juan Pérez",
+//   //   contactType: "Email",
+//   //   service: "Email Service",
+//   //   configurationItem: "Exchange Server",
+//   //   category: "Infrastructure",
+//   //   subCategory: "Email Issues",
+//   //   causedByChange: "No",
+//   //   impact: "High",
+//   //   urgency: "High",
+//   //   assignmentGroup: "IT Support L2",
+//   //   assignedTo: "María García",
+//   //   itCrisis: "No",
+//   //   supplier: "Microsoft",
+//   //   externalReference: "MS-2024-001",
+//   //   shortDescription: "Email server down",
+//   //   description: "Users cannot access email services",
+//   //   closeCode: "Resolved",
+//   //   closureNotes: "Server restarted successfully",
+//   //   workNotes: "Investigated server logs",
+//   //   additionalComments: "Monitor for 24h",
+//   //   opened: "2024-01-15T09:00:00Z",
+//   //   openedBy: "System Monitor",
+//   //   resolved: "2024-01-15T11:30:00Z",
+//   //   resolvedBy: "María García",
+//   //   watchList: "IT Management",
+//   //   correlationId: "CORR-001",
+//   //   sapImplementationStatus: "N/A",
+//   //   followUp: "No",
+//   //   threeStrikeRule: "Strike 1",
+//   //   dueDate: "2024-01-15T17:00:00Z",
+//   //   reasonForWaiting: "N/A",
+//   //   actionsTaken: "Server restart, monitoring enabled",
+//   //   active: "No",
+//   //   resolutionTime: 2.5,
+//   //   cost: 150,
+//   // },
+//   // {
+//   //   id: "TKT-002",
+//   //   parentServiceRequest: "SR-2024-002",
+//   //   status: "In Progress",
+//   //   user: "Ana López",
+//   //   contactType: "Phone",
+//   //   service: "Network Service",
+//   //   configurationItem: "Core Switch",
+//   //   category: "Infrastructure",
+//   //   subCategory: "Network Connectivity",
+//   //   causedByChange: "Yes",
+//   //   impact: "Medium",
+//   //   urgency: "Medium",
+//   //   assignmentGroup: "Network Team",
+//   //   assignedTo: "Carlos Ruiz",
+//   //   itCrisis: "No",
+//   //   supplier: "Cisco",
+//   //   externalReference: "CISCO-2024-002",
+//   //   shortDescription: "Network connectivity issues",
+//   //   description: "Intermittent network connectivity in Building A",
+//   //   closeCode: "",
+//   //   closureNotes: "",
+//   //   workNotes: "Investigating switch configuration",
+//   //   additionalComments: "Affecting 50 users",
+//   //   opened: "2024-01-16T14:00:00Z",
+//   //   openedBy: "Ana López",
+//   //   resolved: "",
+//   //   resolvedBy: "",
+//   //   watchList: "Network Management",
+//   //   correlationId: "CORR-002",
+//   //   sapImplementationStatus: "N/A",
+//   //   followUp: "Yes",
+//   //   threeStrikeRule: "No strikes",
+//   //   dueDate: "2024-01-17T14:00:00Z",
+//   //   reasonForWaiting: "Vendor response",
+//   //   actionsTaken: "Initial diagnosis completed",
+//   //   active: "Yes",
+//   //   resolutionTime: 0,
+//   //   cost: 0,
+//   // },
+// ]
 
-const chartConfig = {
-  resolved: {
-    label: "Resolved",
-    color: "hsl(var(--chart-1))",
-  },
-  inProgress: {
-    label: "In Progress",
-    color: "hsl(var(--chart-2))",
-  },
-  open: {
-    label: "Open",
-    color: "hsl(var(--chart-3))",
-  },
+// Función para generar configuración de colores dinámica basada en los status
+const generateChartConfig = (tickets: Ticket[]) => {
+  const statusCounts: { [key: string]: number } = {}
+  
+  tickets.forEach(ticket => {
+    if (ticket.status) {
+      statusCounts[ticket.status] = (statusCounts[ticket.status] || 0) + 1
+    }
+  })
+  
+  // Colores específicos para status comunes
+  const statusColors: { [key: string]: string } = {
+    'resolved': '#10B981',      // Verde para resuelto
+    'closed': '#10B981',        // Verde para cerrado
+    'in progress': '#3B82F6',   // Azul para en progreso
+    'open': '#F59E0B',          // Amarillo para abierto
+    'pending': '#F59E0B',       // Amarillo para pendiente
+    'cancelled': '#EF4444',     // Rojo para cancelado
+    'failed': '#EF4444',        // Rojo para fallido
+    'on hold': '#8B5CF6',       // Púrpura para en espera
+    'waiting': '#8B5CF6',       // Púrpura para esperando
+  }
+  
+  // Colores de respaldo para status no comunes
+  const fallbackColors = ['#06B6D4', '#84CC16', '#F97316', '#EC4899', '#6366F1', '#14B8A6']
+  
+  const statuses = Object.keys(statusCounts)
+  const config: { [key: string]: { label: string; color: string } } = {}
+  
+  statuses.forEach((status, index) => {
+    const statusKey = status.toLowerCase().replace(/\s+/g, '')
+    const color = statusColors[statusKey] || fallbackColors[index % fallbackColors.length]
+    
+    config[statusKey] = {
+      label: status,
+      color: color
+    }
+  })
+  
+  return config
 }
 
-const resolutionTimeData = [
-  { month: "Ene", avgTime: 4.2 },
-  { month: "Feb", avgTime: 3.8 },
-  { month: "Mar", avgTime: 4.5 },
-  { month: "Abr", avgTime: 3.2 },
-  { month: "May", avgTime: 2.9 },
-  { month: "Jun", avgTime: 3.1 },
-]
+// Función para calcular datos de tiempo de resolución por mes
+const calculateResolutionTimeData = (tickets: Ticket[]) => {
+  const monthlyData: { [key: string]: { total: number; count: number } } = {}
+  
+  tickets.forEach(ticket => {
+    if (ticket.resolutionTime > 0 && ticket.opened) {
+      const date = new Date(ticket.opened)
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+      
+      if (!monthlyData[monthKey]) {
+        monthlyData[monthKey] = { total: 0, count: 0 }
+      }
+      
+      monthlyData[monthKey].total += ticket.resolutionTime
+      monthlyData[monthKey].count += 1
+    }
+  })
+  
+  // Convertir a formato para el gráfico
+  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+  const resolutionTimeData = Object.keys(monthlyData)
+    .sort()
+    .slice(-6) // Últimos 6 meses
+    .map(monthKey => {
+      const [year, month] = monthKey.split('-')
+      const monthIndex = parseInt(month) - 1
+      const avgTime = monthlyData[monthKey].total / monthlyData[monthKey].count
+      
+      return {
+        month: months[monthIndex],
+        avgTime: Math.round(avgTime * 10) / 10 // Redondear a 1 decimal
+      }
+    })
+  
+  return resolutionTimeData.length > 0 ? resolutionTimeData : [
+    { month: "Sin datos", avgTime: 0 }
+  ]
+}
 
-const categoryData = [
-  { name: "Infrastructure", value: 45, color: "#0088FE" },
-  { name: "Applications", value: 30, color: "#00C49F" },
-  { name: "Security", value: 15, color: "#FFBB28" },
-  { name: "Hardware", value: 10, color: "#FF8042" },
-]
 
-const costData = [
-  { category: "Infrastructure", cost: 15000 },
-  { category: "Applications", cost: 8000 },
-  { category: "Security", cost: 12000 },
-  { category: "Hardware", cost: 5000 },
-]
 
 export default function TicketAnalyticsApp() {
-  const [tickets, setTickets] = useState<Ticket[]>(mockTickets)
-  const [filteredTickets, setFilteredTickets] = useState<Ticket[]>(mockTickets)
+  const [tickets, setTickets] = useState<Ticket[]>([])
+  const [filteredTickets, setFilteredTickets] = useState<Ticket[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [aiInsights, setAiInsights] = useState<AIInsights | null>(null)
@@ -224,6 +269,53 @@ export default function TicketAnalyticsApp() {
     tickets.filter((t) => t.resolutionTime > 0).reduce((sum, t) => sum + t.resolutionTime, 0) /
       tickets.filter((t) => t.resolutionTime > 0).length || 0
   const totalCost = tickets.reduce((sum, t) => sum + t.cost, 0)
+
+  // Calcular datos para gráficos
+  const resolutionTimeData = calculateResolutionTimeData(tickets)
+  
+  // Generar configuración de colores dinámica
+  const chartConfig = generateChartConfig(tickets)
+  
+  // Calcular datos de categorías
+  const categoryCounts: { [key: string]: number } = {}
+  tickets.forEach(ticket => {
+    if (ticket.category) {
+      categoryCounts[ticket.category] = (categoryCounts[ticket.category] || 0) + 1
+    }
+  })
+  
+  const categoryData = Object.entries(categoryCounts).map(([name, value], index) => ({
+    name,
+    value,
+    color: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'][index % 6]
+  }))
+  
+  // Calcular datos de costos por categoría
+  const costByCategory: { [key: string]: number } = {}
+  tickets.forEach(ticket => {
+    if (ticket.category && ticket.cost > 0) {
+      costByCategory[ticket.category] = (costByCategory[ticket.category] || 0) + ticket.cost
+    }
+  })
+  
+  const costData = Object.entries(costByCategory).map(([category, cost]) => ({
+    category,
+    cost
+  }))
+  
+  // Calcular datos de status
+  const statusCounts: { [key: string]: number } = {}
+  tickets.forEach(ticket => {
+    if (ticket.status) {
+      statusCounts[ticket.status] = (statusCounts[ticket.status] || 0) + 1
+    }
+  })
+  
+  const statusData = Object.entries(statusCounts).map(([status, count]) => ({
+    status,
+    count,
+    color: chartConfig[status.toLowerCase().replace(/\s+/g, '')]?.color || '#6B7280'
+  }))
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -458,15 +550,21 @@ export default function TicketAnalyticsApp() {
                   <CardDescription>Tendencia mensual en horas</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px]">
-                    <LineChart data={resolutionTimeData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line type="monotone" dataKey="avgTime" stroke="var(--color-resolved)" strokeWidth={2} />
-                    </LineChart>
-                  </ChartContainer>
+                  {resolutionTimeData.length > 0 && resolutionTimeData[0].month !== "Sin datos" ? (
+                    <ChartContainer config={chartConfig} className="h-[300px]">
+                      <LineChart data={resolutionTimeData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Line type="monotone" dataKey="avgTime" stroke="#10B981" strokeWidth={2} />
+                      </LineChart>
+                    </ChartContainer>
+                  ) : (
+                    <div className="h-[300px] flex items-center justify-center text-gray-500">
+                      <p>No hay datos de tiempo de resolución disponibles</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -477,23 +575,29 @@ export default function TicketAnalyticsApp() {
                   <CardDescription>Tickets por tipo de problema</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px]">
-                    <PieChart>
-                      <Pie
-                        data={categoryData}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
-                      >
-                        {categoryData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                    </PieChart>
-                  </ChartContainer>
+                  {categoryData.length > 0 ? (
+                    <ChartContainer config={chartConfig} className="h-[300px]">
+                      <PieChart>
+                        <Pie
+                          data={categoryData}
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={80}
+                          dataKey="value"
+                          label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
+                        >
+                          {categoryData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
+                    </ChartContainer>
+                  ) : (
+                    <div className="h-[300px] flex items-center justify-center text-gray-500">
+                      <p>No hay datos de categorías disponibles</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -504,41 +608,54 @@ export default function TicketAnalyticsApp() {
                   <CardDescription>Análisis de costos operativos</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px]">
-                    <BarChart data={costData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="category" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="cost" fill="var(--color-resolved)" />
-                    </BarChart>
-                  </ChartContainer>
+                  {costData.length > 0 ? (
+                    <ChartContainer config={chartConfig} className="h-[300px]">
+                      <BarChart data={costData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="category" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="cost" fill="#3B82F6" />
+                      </BarChart>
+                    </ChartContainer>
+                  ) : (
+                    <div className="h-[300px] flex items-center justify-center text-gray-500">
+                      <p>No hay datos de costos disponibles</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
-              {/* Análisis de causas raíz */}
+              {/* Distribución por Status */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Causas Raíz Identificadas</CardTitle>
-                  <CardDescription>Problemas recurrentes detectados</CardDescription>
+                  <CardTitle>Distribución por Status</CardTitle>
+                  <CardDescription>Tickets por estado actual</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                      <div>
-                        <p className="font-medium">Fallas de Email Service</p>
-                        <p className="text-sm text-gray-600">3 incidentes similares</p>
-                      </div>
-                      <Badge variant="destructive">Alta Prioridad</Badge>
+                  {statusData.length > 0 ? (
+                    <ChartContainer config={chartConfig} className="h-[300px]">
+                      <PieChart>
+                        <Pie
+                          data={statusData}
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={80}
+                          dataKey="count"
+                          label={({ status, percent }) => `${status} ${((percent || 0) * 100).toFixed(0)}%`}
+                        >
+                          {statusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                      </PieChart>
+                    </ChartContainer>
+                  ) : (
+                    <div className="h-[300px] flex items-center justify-center text-gray-500">
+                      <p>No hay datos de status disponibles</p>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
-                      <div>
-                        <p className="font-medium">Problemas de Red</p>
-                        <p className="text-sm text-gray-600">2 incidentes similares</p>
-                      </div>
-                      <Badge variant="secondary">Media Prioridad</Badge>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -671,58 +788,6 @@ export default function TicketAnalyticsApp() {
               isLoading={isGeneratingInsights}
               onGenerateInsights={generateAIInsights}
             />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Análisis Predictivo</CardTitle>
-                  <CardDescription>Predicciones basadas en patrones históricos</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="p-4 bg-blue-50 rounded-lg">
-                      <h4 className="font-medium">Predicción de Carga de Trabajo</h4>
-                      <p className="text-sm text-gray-600">
-                        Se espera un incremento del 20% en tickets la próxima semana
-                      </p>
-                    </div>
-                    <div className="p-4 bg-green-50 rounded-lg">
-                      <h4 className="font-medium">Optimización de Recursos</h4>
-                      <p className="text-sm text-gray-600">
-                        Reasignar 2 técnicos al equipo de Infrastructure puede reducir el tiempo de resolución en 15%
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Métricas de Rendimiento</CardTitle>
-                  <CardDescription>KPIs del equipo de soporte</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span>SLA Cumplimiento</span>
-                      <span className="font-bold text-green-600">94.5%</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Satisfacción del Cliente</span>
-                      <span className="font-bold text-blue-600">4.2/5</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Tickets Reabiertos</span>
-                      <span className="font-bold text-orange-600">3.1%</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Eficiencia del Equipo</span>
-                      <span className="font-bold text-purple-600">87%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </TabsContent>
         </Tabs>
       </div>
