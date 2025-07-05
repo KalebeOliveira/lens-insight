@@ -15,8 +15,50 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Bar, BarChart, Line, LineChart, Pie, PieChart, Cell, XAxis, YAxis, CartesianGrid } from "recharts"
 import { AlertTriangle, Clock, DollarSign, TrendingUp, FileText, Upload, Search, Filter } from "lucide-react"
 
+// Tipo para los tickets
+type Ticket = {
+  id: string
+  parentServiceRequest: string
+  status: string
+  user: string
+  contactType: string
+  service: string
+  configurationItem: string
+  category: string
+  subCategory: string
+  causedByChange: string
+  impact: string
+  urgency: string
+  assignmentGroup: string
+  assignedTo: string
+  itCrisis: string
+  supplier: string
+  externalReference: string
+  shortDescription: string
+  description: string
+  closeCode: string
+  closureNotes: string
+  workNotes: string
+  additionalComments: string
+  opened: string
+  openedBy: string
+  resolved: string
+  resolvedBy: string
+  watchList: string
+  correlationId: string
+  sapImplementationStatus: string
+  followUp: string
+  threeStrikeRule: string
+  dueDate: string
+  reasonForWaiting: string
+  actionsTaken: string
+  active: string
+  resolutionTime: number
+  cost: number
+}
+
 // Mock data para demostración
-const mockTickets = [
+const mockTickets: Ticket[] = [
   {
     id: "TKT-001",
     parentServiceRequest: "SR-2024-001",
@@ -138,11 +180,11 @@ const costData = [
 ]
 
 export default function TicketAnalyticsApp() {
-  const [tickets, setTickets] = useState(mockTickets)
-  const [filteredTickets, setFilteredTickets] = useState(mockTickets)
+  const [tickets, setTickets] = useState<Ticket[]>(mockTickets)
+  const [filteredTickets, setFilteredTickets] = useState<Ticket[]>(mockTickets)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
-  const [alerts, setAlerts] = useState([
+  const [alerts] = useState([
     {
       id: 1,
       type: "warning",
@@ -180,14 +222,100 @@ export default function TicketAnalyticsApp() {
       tickets.filter((t) => t.resolutionTime > 0).length || 0
   const totalCost = tickets.reduce((sum, t) => sum + t.cost, 0)
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (file) {
-      // Aquí implementarías la lógica para procesar el archivo Excel
-      console.log("Archivo seleccionado:", file.name)
-      // Simulamos la carga de datos
-      alert("Funcionalidad de importación de Excel en desarrollo")
+    if (!file) return
+
+    // Verificar que sea un archivo CSV
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      alert('Por favor selecciona un archivo CSV válido')
+      return
     }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const csvText = e.target?.result as string
+        const lines = csvText.split('\n')
+        
+        // Obtener headers (primera línea)
+        const headers = lines[0].split(',').map(header => header.trim().replace(/"/g, ''))
+        
+        // Procesar cada línea de datos
+        const newTickets: Ticket[] = lines.slice(1).filter(line => line.trim()).map((line, index) => {
+          const values = line.split(',').map(value => value.trim().replace(/"/g, ''))
+          const ticket: Record<string, string | number> = {}
+          
+          // Mapear cada columna del CSV a las propiedades del ticket
+          headers.forEach((header, i) => {
+            const value = values[i] || ''
+            
+            // Convertir tipos específicos
+            if (header === 'resolutionTime' || header === 'cost') {
+              ticket[header] = parseFloat(value) || 0
+            } else {
+              ticket[header] = value
+            }
+          })
+          
+          // Asegurar que todas las propiedades requeridas estén presentes
+          return {
+            id: (ticket.id as string) || `TKT-${String(index + 1).padStart(3, '0')}`,
+            parentServiceRequest: (ticket.parentServiceRequest as string) || '',
+            status: (ticket.status as string) || 'Open',
+            user: (ticket.user as string) || '',
+            contactType: (ticket.contactType as string) || '',
+            service: (ticket.service as string) || '',
+            configurationItem: (ticket.configurationItem as string) || '',
+            category: (ticket.category as string) || '',
+            subCategory: (ticket.subCategory as string) || '',
+            causedByChange: (ticket.causedByChange as string) || 'No',
+            impact: (ticket.impact as string) || 'Medium',
+            urgency: (ticket.urgency as string) || 'Medium',
+            assignmentGroup: (ticket.assignmentGroup as string) || '',
+            assignedTo: (ticket.assignedTo as string) || '',
+            itCrisis: (ticket.itCrisis as string) || 'No',
+            supplier: (ticket.supplier as string) || '',
+            externalReference: (ticket.externalReference as string) || '',
+            shortDescription: (ticket.shortDescription as string) || '',
+            description: (ticket.description as string) || '',
+            closeCode: (ticket.closeCode as string) || '',
+            closureNotes: (ticket.closureNotes as string) || '',
+            workNotes: (ticket.workNotes as string) || '',
+            additionalComments: (ticket.additionalComments as string) || '',
+            opened: (ticket.opened as string) || new Date().toISOString(),
+            openedBy: (ticket.openedBy as string) || '',
+            resolved: (ticket.resolved as string) || '',
+            resolvedBy: (ticket.resolvedBy as string) || '',
+            watchList: (ticket.watchList as string) || '',
+            correlationId: (ticket.correlationId as string) || '',
+            sapImplementationStatus: (ticket.sapImplementationStatus as string) || 'N/A',
+            followUp: (ticket.followUp as string) || 'No',
+            threeStrikeRule: (ticket.threeStrikeRule as string) || 'No strikes',
+            dueDate: (ticket.dueDate as string) || '',
+            reasonForWaiting: (ticket.reasonForWaiting as string) || 'N/A',
+            actionsTaken: (ticket.actionsTaken as string) || '',
+            active: (ticket.active as string) || 'Yes',
+            resolutionTime: (ticket.resolutionTime as number) || 0,
+            cost: (ticket.cost as number) || 0,
+          }
+        })
+        
+        // Actualizar el estado con los nuevos tickets
+        setTickets(newTickets)
+        alert(`Se importaron ${newTickets.length} tickets exitosamente`)
+        
+      } catch (error) {
+        console.error('Error procesando el archivo CSV:', error)
+        alert('Error al procesar el archivo CSV. Verifica el formato del archivo.')
+      }
+    }
+    
+    reader.onerror = () => {
+      alert('Error al leer el archivo')
+    }
+    
+    reader.readAsText(file)
   }
 
   return (
@@ -205,7 +333,7 @@ export default function TicketAnalyticsApp() {
               <input
                 type="file"
                 accept=".xlsx,.xls,.csv"
-                onChange={handleFileUpload}
+                onChange={handleInput}
                 className="hidden"
                 id="file-upload"
               />
@@ -324,7 +452,7 @@ export default function TicketAnalyticsApp() {
                         cy="50%"
                         outerRadius={80}
                         dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                       >
                         {categoryData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
