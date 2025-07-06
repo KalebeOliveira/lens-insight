@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Bar, BarChart, Line, LineChart, Pie, PieChart, Cell, XAxis, YAxis, CartesianGrid } from "recharts"
-import { AlertTriangle, Clock, DollarSign, TrendingUp, FileText, Upload, Search, Filter } from "lucide-react"
+import { AlertTriangle, Clock, DollarSign, TrendingUp, FileText, Upload, Search, Filter, LogOut, User } from "lucide-react"
 import { AIInsightsPanel, type AIInsights } from "@/components/ai-insights-panel"
 import { toast } from "sonner"
 
@@ -233,6 +233,7 @@ export default function TicketAnalyticsApp() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [aiInsights, setAiInsights] = useState<AIInsights | null>(null)
   const [isGeneratingInsights, setIsGeneratingInsights] = useState(false)
+  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null)
 
   // Verificar se a API key está configurada
   useEffect(() => {
@@ -242,8 +243,8 @@ export default function TicketAnalyticsApp() {
         const data = await response.json()
         
         if (!data.configured) {
-          toast.error('Configuração de OpenAI necessária', {
-            description: data.error || 'Configure sua API key no arquivo .env para usar a funcionalidade de IA',
+          toast.error('Configuración de OpenAI necesaria', {
+            description: data.error || 'Configurá tu API key en el archivo .env para usar la funcionalidad de IA',
             duration: 8000,
           })
         }
@@ -254,22 +255,13 @@ export default function TicketAnalyticsApp() {
     
     checkApiKey()
   }, [])
-  const [alerts] = useState([
-    // {
-    //   id: 1,
-    //   type: "warning",
-    //   title: "Posible Incidente Recurrente",
-    //   description: "Se detectaron 3 tickets similares relacionados con 'Email Service' en las últimas 2 horas.",
-    //   timestamp: new Date().toISOString(),
-    // },
-    // {
-    //   id: 2,
-    //   type: "info",
-    //   title: "Tiempo de Resolución Mejorado",
-    //   description: "El tiempo promedio de resolución ha mejorado un 15% este mes.",
-    //   timestamp: new Date().toISOString(),
-    // },
-  ])
+  const [alerts] = useState<Array<{
+    id: number
+    type: string
+    title: string
+    description: string
+    timestamp: string
+  }>>([])
 
   // Filtrar tickets
   useEffect(() => {
@@ -345,7 +337,7 @@ export default function TicketAnalyticsApp() {
 
     // Verificar que sea un archivo CSV
     if (!file.name.toLowerCase().endsWith('.csv')) {
-      toast.error('Por favor selecciona un archivo CSV válido')
+      toast.error('Por favor seleccioná un archivo CSV válido')
       return
     }
 
@@ -420,12 +412,12 @@ export default function TicketAnalyticsApp() {
         
         // Actualizar el estado con los nuevos tickets
         setTickets(newTickets)
-        toast.success(`Se importaron ${newTickets.length} tickets exitosamente`)
+        toast.success(`¡Se importaron ${newTickets.length} tickets exitosamente!`)
         
       } catch (error) {
         console.error('Error procesando el archivo CSV:', error)
         toast.error('Error al procesar el archivo CSV', {
-          description: 'Verifica el formato del archivo y tenta novamente',
+          description: 'Verificá el formato del archivo e intentá de nuevo',
           duration: 5000,
         })
       }
@@ -433,7 +425,7 @@ export default function TicketAnalyticsApp() {
     
     reader.onerror = () => {
       toast.error('Error al leer el archivo', {
-        description: 'Verifica que el archivo no esté corrupto',
+        description: 'Verificá que el archivo no esté corrupto',
         duration: 5000,
       })
     }
@@ -441,9 +433,26 @@ export default function TicketAnalyticsApp() {
     reader.readAsText(file)
   }
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      })
+
+      if (response.ok) {
+        toast.success('¡Cierre de sesión exitoso!')
+        window.location.href = '/login'
+      } else {
+        toast.error('Error al cerrar sesión')
+      }
+    } catch (error) {
+      toast.error('Error al cerrar sesión')
+    }
+  }
+
   const generateAIInsights = async () => {
     if (tickets.length === 0) {
-      toast.error('No hay tickets para analizar. Por favor, importa datos primero.')
+      toast.error('No hay tickets para analizar. Por favor, importá datos primero.')
       return
     }
 
@@ -464,12 +473,12 @@ export default function TicketAnalyticsApp() {
       }
 
       setAiInsights(data.insights)
-      toast.success('Insights generados exitosamente con IA')
+      toast.success('¡Insights generados exitosamente con IA!')
     } catch (error) {
       console.error('Error generating AI insights:', error)
       const errorMessage = error instanceof Error ? error.message : 'Error al generar insights con IA'
       toast.error(errorMessage, {
-        description: 'Verifica tu conexión y configuración de OpenAI',
+        description: 'Verificá tu conexión y configuración de OpenAI',
         duration: 5000,
       })
     } finally {
@@ -483,10 +492,14 @@ export default function TicketAnalyticsApp() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Análisis de Tickets</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Lens Insights</h1>
             <p className="text-gray-600">Dashboard inteligente para gestión y análisis de tickets</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2 mr-4">
+              <User className="h-4 w-4 text-gray-600" />
+              <span className="text-sm text-gray-600">Administrador</span>
+            </div>
             <Button variant="outline" className="flex items-center gap-2 bg-transparent">
               <Upload className="h-4 w-4" />
               <input
@@ -497,10 +510,18 @@ export default function TicketAnalyticsApp() {
                 id="file-upload"
               />
               <label htmlFor="file-upload" className="cursor-pointer">
-                Importar Excel
+                Importar CSV
               </label>
             </Button>
-            {/* <Button>Exportar Reporte</Button> */}
+            <Button>Exportar Reporte</Button>
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <LogOut className="h-4 w-4" />
+              Salir
+            </Button>
           </div>
         </div>
 

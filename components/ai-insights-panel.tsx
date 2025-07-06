@@ -123,9 +123,9 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
               </div>
             ) : (
               <>
-                <p className="text-gray-600 mb-4">
-                  Haz clic en el botón para generar análisis inteligente de tus datos
-                </p>
+                            <p className="text-gray-600 mb-4">
+              Hacé clic en el botón para generar análisis inteligente de tus datos
+            </p>
                 <Button onClick={onGenerateInsights} disabled={isLoading}>
                   Generar Insights con IA
                 </Button>
