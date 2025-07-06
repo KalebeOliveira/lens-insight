@@ -23,7 +23,7 @@ export function AuthCheck() {
         } else {
           setIsAuthenticated(false)
         }
-      } catch (error) {
+      } catch {
         setIsAuthenticated(false)
       } finally {
         setIsLoading(false)
