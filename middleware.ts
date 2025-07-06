@@ -3,12 +3,12 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get('session_token')
+  const isHomePage = request.nextUrl.pathname === '/'
   const isLoginPage = request.nextUrl.pathname === '/login'
-  const isLandingPage = request.nextUrl.pathname === '/landing'
   const isDashboardPage = request.nextUrl.pathname === '/dashboard'
 
   // Permitir acesso à landing page sempre
-  if (isLandingPage) {
+  if (isHomePage) {
     return NextResponse.next()
   }
 
