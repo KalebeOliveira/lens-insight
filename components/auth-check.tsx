@@ -61,7 +61,7 @@ export function AuthCheck() {
       onClick={handleAccess}
     >
       <Eye className="w-5 h-5 mr-2" />
-      {isAuthenticated ? 'Acessar Plataforma' : 'Ver Demo Gratuita'}
+      {isAuthenticated ? 'Acceder' : 'Ver Demo Gratuita'}
     </Button>
   )
 } 
