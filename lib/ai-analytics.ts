@@ -94,17 +94,9 @@ export function prepareDataForAI(tickets: Ticket[]): AnalyticsData {
     .sort((a, b) => b.frequency - a.frequency)
 
   // Prepare sample tickets for analysis
-  const sampleTickets = tickets.slice(0, 5).map(t => ({
-    id: t.id,
-    status: t.status,
-    category: t.category,
-    service: t.service,
-    impact: t.impact,
-    urgency: t.urgency,
-    resolutionTime: t.resolutionTime,
-    cost: t.cost,
-    shortDescription: t.shortDescription
-  }))
+  const sampleTickets = tickets.slice(0, 15)
+
+  console.log('sampleTickets', sampleTickets)
 
   return {
     totalTickets: total,

@@ -39,6 +39,7 @@ IMPORTANTE:
 - Se conciso, menciona herramientas puntuales, no embellezcas las respuestas de los insights, tu publico es técnico y quiere respuestas concretas y con detalle
 - Utiliza toda la información disponible (usuarios, grupos de asignación, proveedores, notas de trabajo, etc.) para generar insights más precisos
 - Máximo 3-4 recomendaciones por root cause
+- TODAS las respuestas deben estar en español
 
 Responde en formato JSON estructurado con el siguiente esquema:
 {
