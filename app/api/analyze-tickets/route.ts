@@ -230,68 +230,19 @@ async function generateAIInsights(tickets: Ticket[]): Promise<AIInsights> {
   } catch (error) {
     console.error('Error calling OpenAI API:', error)
     
-    // Fallback to basic analysis if API fails
-    return {
-      averageResolutionTime: {
-        currentAverage: metrics.avgResolutionTime,
-        trend: metrics.avgResolutionTime > AI_CONFIG.RESOLUTION_TIME_TARGET ? "Above target" : "Within target",
-        recommendations: [
-          "Implementar monitoreo proactivo",
-          "Mejorar documentación de procedimientos",
-          "Optimizar asignación de recursos"
-        ],
-        analysis: `El tiempo promedio de resolución actual es de ${metrics.avgResolutionTime.toFixed(1)} horas.`
-      },
-      categoryDistribution: {
-        distribution: categoryDistribution,
-        topCategories: categoryDistribution.slice(0, 3).map(c => c.category),
-        analysis: `La categoría más frecuente es ${categoryDistribution[0]?.category || 'N/A'} con ${categoryDistribution[0]?.count || 0} tickets.`,
-        recommendations: [
-          "Fortalecer el equipo de la categoría más frecuente",
-          "Implementar procedimientos específicos para categorías principales",
-          "Crear documentación especializada"
-        ]
-      },
-      costsPerCategory: {
-        costs: costsPerCategory,
-        totalCost: metrics.totalCost,
-        analysis: `El costo total es $${metrics.totalCost.toLocaleString()} con un promedio de $${(metrics.totalCost / metrics.total).toFixed(2)} por ticket.`,
-        recommendations: [
-          "Optimizar recursos en categorías de alto costo",
-          "Implementar medidas de prevención",
-          "Negociar mejores tarifas con proveedores"
-        ]
-      },
-      identifiedRootCauses: {
-        rootCauses: rootCauses,
-        analysis: `Se identificaron ${rootCauses.length} patrones recurrentes que requieren atención.`
-      },
-      predictiveAnalysis: {
-        workloadPrediction: "Se espera un incremento del 15-20% en la carga de trabajo basado en tendencias históricas.",
-        resourceOptimization: [
-          "Reasignar 2 técnicos al equipo de Infrastructure",
-          "Implementar automatización para tickets de baja complejidad",
-          "Mejorar el sistema de priorización"
-        ],
-        riskFactors: [
-          "Picos de demanda en horarios específicos",
-          "Dependencia de proveedores externos",
-          "Falta de documentación actualizada"
-        ],
-        analysis: "Los patrones sugieren la necesidad de optimización de recursos y mejor planificación."
-      },
-      performanceMetrics: {
-        slaCompliance: AI_CONFIG.SLA_COMPLIANCE_TARGET - 0.5,
-        customerSatisfaction: AI_CONFIG.CUSTOMER_SATISFACTION_TARGET + 0.2,
-        reopenedTickets: 3.1,
-        teamEfficiency: 87,
-        analysis: "El equipo mantiene buenos niveles de cumplimiento de SLA y satisfacción del cliente.",
-        recommendations: [
-          "Reducir la tasa de tickets reabiertos",
-          "Implementar encuestas de satisfacción más frecuentes",
-          "Mejorar la comunicación con usuarios"
-        ]
-      }
+    // Throw error instead of returning mock data
+    const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+    
+    if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+      throw new Error('API Key de OpenAI inválida. Verifique sua configuração no arquivo .env')
+    } else if (errorMessage.includes('429') || errorMessage.includes('Rate limit')) {
+      throw new Error('Limite de requisições excedido. Tente novamente em alguns minutos')
+    } else if (errorMessage.includes('insufficient_quota')) {
+      throw new Error('Créditos insuficientes na conta OpenAI. Adicione créditos para continuar')
+    } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+      throw new Error('Erro de conexão. Verifique sua internet e tente novamente')
+    } else {
+      throw new Error(`Erro ao conectar com OpenAI: ${errorMessage}`)
     }
   }
 }
@@ -302,7 +253,14 @@ export async function POST(request: NextRequest) {
 
     if (!tickets || !Array.isArray(tickets)) {
       return NextResponse.json(
-        { error: 'Invalid tickets data provided' },
+        { error: 'Dados de tickets inválidos fornecidos' },
+        { status: 400 }
+      )
+    }
+
+    if (tickets.length < AI_CONFIG.MIN_TICKETS_FOR_ANALYSIS) {
+      return NextResponse.json(
+        { error: `É necessário pelo menos ${AI_CONFIG.MIN_TICKETS_FOR_ANALYSIS} tickets para gerar análise significativa` },
         { status: 400 }
       )
     }
@@ -317,8 +275,11 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error in analyze-tickets API:', error)
+    
+    const errorMessage = error instanceof Error ? error.message : 'Erro interno do servidor'
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     )
   }

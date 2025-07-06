@@ -15,6 +15,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Bar, BarChart, Line, LineChart, Pie, PieChart, Cell, XAxis, YAxis, CartesianGrid } from "recharts"
 import { AlertTriangle, Clock, DollarSign, TrendingUp, FileText, Upload, Search, Filter } from "lucide-react"
 import { AIInsightsPanel, type AIInsights } from "@/components/ai-insights-panel"
+import { toast } from "sonner"
 
 // Tipo para los tickets
 type Ticket = {
@@ -232,21 +233,42 @@ export default function TicketAnalyticsApp() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [aiInsights, setAiInsights] = useState<AIInsights | null>(null)
   const [isGeneratingInsights, setIsGeneratingInsights] = useState(false)
+
+  // Verificar se a API key está configurada
+  useEffect(() => {
+    const checkApiKey = async () => {
+      try {
+        const response = await fetch('/api/check-api-key')
+        const data = await response.json()
+        
+        if (!data.configured) {
+          toast.error('Configuração de OpenAI necessária', {
+            description: data.error || 'Configure sua API key no arquivo .env para usar a funcionalidade de IA',
+            duration: 8000,
+          })
+        }
+      } catch (error) {
+        // Silenciar erro de verificação inicial
+      }
+    }
+    
+    checkApiKey()
+  }, [])
   const [alerts] = useState([
-    {
-      id: 1,
-      type: "warning",
-      title: "Posible Incidente Recurrente",
-      description: "Se detectaron 3 tickets similares relacionados con 'Email Service' en las últimas 2 horas.",
-      timestamp: new Date().toISOString(),
-    },
-    {
-      id: 2,
-      type: "info",
-      title: "Tiempo de Resolución Mejorado",
-      description: "El tiempo promedio de resolución ha mejorado un 15% este mes.",
-      timestamp: new Date().toISOString(),
-    },
+    // {
+    //   id: 1,
+    //   type: "warning",
+    //   title: "Posible Incidente Recurrente",
+    //   description: "Se detectaron 3 tickets similares relacionados con 'Email Service' en las últimas 2 horas.",
+    //   timestamp: new Date().toISOString(),
+    // },
+    // {
+    //   id: 2,
+    //   type: "info",
+    //   title: "Tiempo de Resolución Mejorado",
+    //   description: "El tiempo promedio de resolución ha mejorado un 15% este mes.",
+    //   timestamp: new Date().toISOString(),
+    // },
   ])
 
   // Filtrar tickets
@@ -323,7 +345,7 @@ export default function TicketAnalyticsApp() {
 
     // Verificar que sea un archivo CSV
     if (!file.name.toLowerCase().endsWith('.csv')) {
-      alert('Por favor selecciona un archivo CSV válido')
+      toast.error('Por favor selecciona un archivo CSV válido')
       return
     }
 
@@ -398,16 +420,22 @@ export default function TicketAnalyticsApp() {
         
         // Actualizar el estado con los nuevos tickets
         setTickets(newTickets)
-        alert(`Se importaron ${newTickets.length} tickets exitosamente`)
+        toast.success(`Se importaron ${newTickets.length} tickets exitosamente`)
         
       } catch (error) {
         console.error('Error procesando el archivo CSV:', error)
-        alert('Error al procesar el archivo CSV. Verifica el formato del archivo.')
+        toast.error('Error al procesar el archivo CSV', {
+          description: 'Verifica el formato del archivo y tenta novamente',
+          duration: 5000,
+        })
       }
     }
     
     reader.onerror = () => {
-      alert('Error al leer el archivo')
+      toast.error('Error al leer el archivo', {
+        description: 'Verifica que el archivo no esté corrupto',
+        duration: 5000,
+      })
     }
     
     reader.readAsText(file)
@@ -415,7 +443,7 @@ export default function TicketAnalyticsApp() {
 
   const generateAIInsights = async () => {
     if (tickets.length === 0) {
-      alert('No hay tickets para analizar. Por favor, importa datos primero.')
+      toast.error('No hay tickets para analizar. Por favor, importa datos primero.')
       return
     }
 
@@ -429,15 +457,21 @@ export default function TicketAnalyticsApp() {
         body: JSON.stringify({ tickets }),
       })
 
+      const data = await response.json()
+
       if (!response.ok) {
-        throw new Error('Error al generar insights')
+        throw new Error(data.error || 'Error al generar insights')
       }
 
-      const data = await response.json()
       setAiInsights(data.insights)
+      toast.success('Insights generados exitosamente con IA')
     } catch (error) {
       console.error('Error generating AI insights:', error)
-      alert('Error al generar insights con IA. Verifica tu conexión y configuración.')
+      const errorMessage = error instanceof Error ? error.message : 'Error al generar insights con IA'
+      toast.error(errorMessage, {
+        description: 'Verifica tu conexión y configuración de OpenAI',
+        duration: 5000,
+      })
     } finally {
       setIsGeneratingInsights(false)
     }
@@ -449,7 +483,7 @@ export default function TicketAnalyticsApp() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Análisis de Tickets de Soporte</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Análisis de Tickets</h1>
             <p className="text-gray-600">Dashboard inteligente para gestión y análisis de tickets</p>
           </div>
           <div className="flex gap-2">
@@ -466,7 +500,7 @@ export default function TicketAnalyticsApp() {
                 Importar Excel
               </label>
             </Button>
-            <Button>Exportar Reporte</Button>
+            {/* <Button>Exportar Reporte</Button> */}
           </div>
         </div>
 

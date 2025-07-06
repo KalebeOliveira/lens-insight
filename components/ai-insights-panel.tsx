@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -72,6 +72,30 @@ interface AIInsightsPanelProps {
 
 export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AIInsightsPanelProps) {
   const [activeTab, setActiveTab] = useState("overview")
+  const [currentMessage, setCurrentMessage] = useState(0)
+  
+  // Frases amigáveis para mostrar durante o loading
+  const friendlyMessages = [
+    "Analizando tus datos con inteligencia artificial...",
+    "Identificando patrones y tendencias...",
+    "Generando insights valiosos...",
+    "Encontrando oportunidades de mejora...",
+    "Preparando recomendaciones personalizadas...",
+    "Procesando información para optimizar procesos..."
+  ]
+  
+  // Mudar mensagem a cada 2 segundos durante o loading
+  useEffect(() => {
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setCurrentMessage((prev) => (prev + 1) % friendlyMessages.length)
+      }, 3000)
+      
+      return () => clearInterval(interval)
+    } else {
+      setCurrentMessage(0)
+    }
+  }, [isLoading, friendlyMessages.length])
 
   if (!insights) {
     return (
@@ -88,12 +112,25 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
         <CardContent>
           <div className="text-center py-8">
             <Brain className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 mb-4">
-              Haz clic en el botón para generar análisis inteligente de tus datos
-            </p>
-            <Button onClick={onGenerateInsights} disabled={isLoading}>
-              {isLoading ? "Generando..." : "Generar Insights con IA"}
-            </Button>
+            {isLoading ? (
+              <div className="space-y-4">
+                <p className="text-gray-600 mb-4">
+                  {friendlyMessages[currentMessage]}
+                </p>
+                <Button onClick={onGenerateInsights} disabled={isLoading}>
+                  Generando...
+                </Button>
+              </div>
+            ) : (
+              <>
+                <p className="text-gray-600 mb-4">
+                  Haz clic en el botón para generar análisis inteligente de tus datos
+                </p>
+                <Button onClick={onGenerateInsights} disabled={isLoading}>
+                  Generar Insights con IA
+                </Button>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -205,7 +242,7 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-sm font-medium">Carga de trabajo</div>
+                  <div className="text-2xl font-bold">N/A</div>
                   <p className="text-xs text-muted-foreground">Incremento esperado</p>
                 </CardContent>
               </Card>
