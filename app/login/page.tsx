@@ -33,7 +33,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         toast.success('¡Inicio de sesión exitoso!')
-        router.push('/')
+        router.push('/dashboard')
       } else {
         toast.error(data.error || 'Error al iniciar sesión')
       }
