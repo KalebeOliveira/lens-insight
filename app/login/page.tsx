@@ -45,22 +45,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 transition-colors duration-300">
+      <div className="w-full max-w-md">  
         {/* Logo e título */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <Brain className="h-12 w-12 text-blue-600" />
+            <Brain className="h-12 w-12 text-blue-600 dark:text-blue-400" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Lens Insights</h1>
-          <p className="text-gray-600">Análisis inteligente de tickets de soporte</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Lens Insights</h1>
+          <p className="text-gray-600 dark:text-gray-300">Análisis inteligente de tickets de soporte</p>
         </div>
 
         {/* Card de login */}
-        <Card className="shadow-xl border-0">
+        <Card className="shadow-xl border-0 dark:bg-gray-800 dark:border-gray-700">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">¡Bienvenido de vuelta!</CardTitle>
-            <CardDescription className="text-center">
+            <CardTitle className="text-2xl text-center dark:text-white">¡Bienvenido de vuelta!</CardTitle>
+            <CardDescription className="text-center dark:text-gray-300">
               Ingresá con tus credenciales para acceder a la plataforma
             </CardDescription>
           </CardHeader>
@@ -122,7 +122,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center mt-6">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             © 2024 Lens Insights. Todos los derechos reservados.
           </p>
         </div>
