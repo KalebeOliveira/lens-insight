@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { AuthCheck } from "@/components/auth-check";
 
 export default function LandingPage() {
   return (
@@ -63,24 +62,24 @@ export default function LandingPage() {
                 Contacto
               </a>
             </nav>
-            <Button 
-              className="bg-blue-800 hover:bg-blue-900" 
+            <Button
+              className="bg-blue-800 hover:bg-blue-900"
               onClick={() => {
                 // Verificar se está logado e redirecionar
-                fetch('/api/check-api-key')
-                  .then(response => {
+                fetch("/api/check-api-key")
+                  .then((response) => {
                     if (response.ok) {
-                      window.location.href = '/dashboard'
+                      window.location.href = "/dashboard";
                     } else {
-                      window.location.href = '/login'
+                      window.location.href = "/login";
                     }
                   })
                   .catch(() => {
-                    window.location.href = '/login'
-                  })
+                    window.location.href = "/login";
+                  });
               }}
             >
-              Acessar Plataforma
+              Acceder
             </Button>
           </div>
         </div>
@@ -104,7 +103,17 @@ export default function LandingPage() {
               inteligente.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <AuthCheck />
+              <Button
+                size="lg"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                // onClick={handleAccess}
+                asChild
+              >
+                <Link href={"/dashboard"}>
+                  <Eye className="w-5 h-5 mr-2" />
+                  Iniciemos
+                </Link>
+              </Button>
               <Button
                 size="lg"
                 variant="outline"
