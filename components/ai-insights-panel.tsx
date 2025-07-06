@@ -61,14 +61,14 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
             {isLoading ? (
               <>
                 <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-black-500" />
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Generando insights con IA...
                 </p>
               </>
             ) : (
               <>
-                <Brain className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-600 mb-4">
+                <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground mb-4">
                   Hacé clic en el botón para generar análisis inteligente de tus datos
                 </p>
                 <Button onClick={onGenerateInsights} disabled={isLoading}>
@@ -111,7 +111,7 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
               <CardContent className="space-y-4">
                 <div>
                   <h4 className="font-semibold mb-2">Análisis General</h4>
-                  <p className="text-sm text-gray-600">{insights.identifiedRootCauses.analysis}</p>
+                  <p className="text-sm text-muted-foreground">{insights.identifiedRootCauses.analysis}</p>
                 </div>
                 
                 <div>
@@ -169,7 +169,7 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2">Análisis</h4>
-                    <p className="text-sm text-gray-600">{insights.predictiveAnalysis.analysis}</p>
+                    <p className="text-sm text-muted-foreground">{insights.predictiveAnalysis.analysis}</p>
                   </div>
                 </div>
                 

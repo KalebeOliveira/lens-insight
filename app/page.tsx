@@ -15,6 +15,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Bar, BarChart, Line, LineChart, Pie, PieChart, Cell, XAxis, YAxis, CartesianGrid } from "recharts"
 import { AlertTriangle, Clock, DollarSign, TrendingUp, FileText, Upload, Search, Filter, LogOut, User } from "lucide-react"
 import { AIInsightsPanel, type AIInsights } from "@/components/ai-insights-panel"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { toast } from "sonner"
 
 // Tipo para los tickets
@@ -487,19 +488,20 @@ export default function TicketAnalyticsApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Lens Insights</h1>
-            <p className="text-gray-600">Dashboard inteligente para gestión y análisis de tickets</p>
+            <h1 className="text-3xl font-bold text-foreground">Lens Insights</h1>
+            <p className="text-muted-foreground">Dashboard inteligente para gestión y análisis de tickets</p>
           </div>
           <div className="flex gap-2 items-center">
             <div className="flex items-center gap-2 mr-4">
-              <User className="h-4 w-4 text-gray-600" />
-              <span className="text-sm text-gray-600">Administrador</span>
+              <User className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Administrador</span>
             </div>
+            <ThemeToggle />
             <Button variant="outline" className="flex items-center gap-2 bg-transparent">
               <Upload className="h-4 w-4" />
               <input
@@ -529,7 +531,7 @@ export default function TicketAnalyticsApp() {
           {alerts.map((alert) => (
             <Alert
               key={alert.id}
-              className={alert.type === "warning" ? "border-orange-200 bg-orange-50" : "border-blue-200 bg-blue-50"}
+              className={alert.type === "warning" ? "border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950" : "border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"}
             >
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>{alert.title}</AlertTitle>
@@ -615,7 +617,7 @@ export default function TicketAnalyticsApp() {
                       </LineChart>
                     </ChartContainer>
                   ) : (
-                    <div className="h-[300px] flex items-center justify-center text-gray-500">
+                    <div className="h-[300px] flex items-center justify-center text-muted-foreground">
                       <p>No hay datos de tiempo de resolución disponibles</p>
                     </div>
                   )}
