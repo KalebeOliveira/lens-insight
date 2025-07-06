@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
@@ -43,6 +43,30 @@ interface AIInsightsPanelProps {
 
 export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AIInsightsPanelProps) {
   const [activeTab, setActiveTab] = useState('root-causes')
+  const [currentMessage, setCurrentMessage] = useState(0)
+  
+  // Frases que mostram o que está acontecendo durante o processamento
+  const loadingMessages = [
+    "Analizando patrones en tus datos...",
+    "Identificando causas raíz recurrentes...",
+    "Procesando información con inteligencia artificial...",
+    "Generando recomendaciones específicas...",
+    "Calculando predicciones de carga de trabajo...",
+    "Finalizando insights personalizados..."
+  ]
+  
+  // Mudar mensagem a cada 3 segundos durante o loading
+  useEffect(() => {
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setCurrentMessage((prev) => (prev + 1) % loadingMessages.length)
+      }, 3000)
+      
+      return () => clearInterval(interval)
+    } else {
+      setCurrentMessage(0)
+    }
+  }, [isLoading, loadingMessages.length])
 
   if (!insights) {
     return (
@@ -61,9 +85,23 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
             {isLoading ? (
               <>
                 <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-black-500" />
-                <p className="text-muted-foreground mb-4">
-                  Generando insights con IA...
-                </p>
+                <div className="space-y-2">
+                  <p className="text-muted-foreground font-medium transition-opacity duration-500">
+                    {loadingMessages[currentMessage]}
+                  </p>
+                  <div className="flex justify-center space-x-1">
+                    {loadingMessages.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          index === currentMessage 
+                            ? 'bg-black-500 scale-125' 
+                            : 'bg-gray-300 dark:bg-gray-600'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </>
             ) : (
               <>
