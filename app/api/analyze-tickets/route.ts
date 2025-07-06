@@ -43,31 +43,13 @@ export interface Ticket {
 }
 
 export interface AIInsights {
-  averageResolutionTime: {
-    currentAverage: number
-    trend: string
-    recommendations: string[]
-    analysis: string
-  }
-  categoryDistribution: {
-    distribution: Array<{ category: string; count: number; percentage: number }>
-    topCategories: string[]
-    analysis: string
-    recommendations: string[]
-  }
-  costsPerCategory: {
-    costs: Array<{ category: string; totalCost: number; averageCost: number }>
-    totalCost: number
-    analysis: string
-    recommendations: string[]
-  }
   identifiedRootCauses: {
     rootCauses: Array<{
       cause: string
       frequency: number
       impact: string
-      recommendations: string[]
     }>
+    recommendations: string[]
     analysis: string
   }
   predictiveAnalysis: {
@@ -76,59 +58,9 @@ export interface AIInsights {
     riskFactors: string[]
     analysis: string
   }
-  performanceMetrics: {
-    slaCompliance: number
-    customerSatisfaction: number
-    reopenedTickets: number
-    teamEfficiency: number
-    analysis: string
-    recommendations: string[]
-  }
 }
 
-function calculateBasicMetrics(tickets: Ticket[]) {
-  const total = tickets.length
-  const resolved = tickets.filter(t => t.status === "Resolved").length
-  const avgResolutionTime = tickets.filter(t => t.resolutionTime > 0)
-    .reduce((sum, t) => sum + t.resolutionTime, 0) / 
-    tickets.filter(t => t.resolutionTime > 0).length || 0
-  const totalCost = tickets.reduce((sum, t) => sum + t.cost, 0)
 
-  return { total, resolved, avgResolutionTime, totalCost }
-}
-
-function generateCategoryDistribution(tickets: Ticket[]) {
-  const categoryCount = tickets.reduce((acc, ticket) => {
-    acc[ticket.category] = (acc[ticket.category] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-
-  const total = tickets.length
-  const distribution = Object.entries(categoryCount).map(([category, count]) => ({
-    category,
-    count,
-    percentage: (count / total) * 100
-  })).sort((a, b) => b.count - a.count)
-
-  return distribution
-}
-
-function generateCostsPerCategory(tickets: Ticket[]) {
-  const categoryCosts = tickets.reduce((acc, ticket) => {
-    if (!acc[ticket.category]) {
-      acc[ticket.category] = { totalCost: 0, count: 0 }
-    }
-    acc[ticket.category].totalCost += ticket.cost
-    acc[ticket.category].count += 1
-    return acc
-  }, {} as Record<string, { totalCost: number; count: number }>)
-
-  return Object.entries(categoryCosts).map(([category, data]) => ({
-    category,
-    totalCost: data.totalCost,
-    averageCost: data.totalCost / data.count
-  })).sort((a, b) => b.totalCost - a.totalCost)
-}
 
 function identifyRootCauses(tickets: Ticket[]) {
   // Group tickets by service and category to identify patterns
@@ -153,12 +85,7 @@ function identifyRootCauses(tickets: Ticket[]) {
     .map(pattern => ({
       cause: `${pattern.service} - ${pattern.category}`,
       frequency: pattern.count,
-      impact: pattern.tickets.some(t => t.impact === "High") ? "High" : "Medium",
-      recommendations: [
-        `Implementar monitoreo proactivo para ${pattern.service}`,
-        `Crear documentación de resolución para ${pattern.category}`,
-        `Establecer procedimientos estándar para incidentes similares`
-      ]
+      impact: pattern.tickets.some(t => t.impact === "High") ? "High" : "Medium"
     }))
     .sort((a, b) => b.frequency - a.frequency)
 
@@ -166,19 +93,11 @@ function identifyRootCauses(tickets: Ticket[]) {
 }
 
 async function generateAIInsights(tickets: Ticket[]): Promise<AIInsights> {
-  const metrics = calculateBasicMetrics(tickets)
-  const categoryDistribution = generateCategoryDistribution(tickets)
-  const costsPerCategory = generateCostsPerCategory(tickets)
   const rootCauses = identifyRootCauses(tickets)
 
   // Prepare data for ChatGPT analysis
   const analysisData = {
-    totalTickets: metrics.total,
-    resolvedTickets: metrics.resolved,
-    averageResolutionTime: metrics.avgResolutionTime,
-    totalCost: metrics.totalCost,
-    categoryDistribution,
-    costsPerCategory,
+    totalTickets: tickets.length,
     rootCauses,
     sampleTickets: tickets.slice(0, 5).map(t => ({
       id: t.id,

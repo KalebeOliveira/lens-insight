@@ -30,35 +30,16 @@ export const AI_CONFIG = {
 
 export const SYSTEM_PROMPT = `Eres un experto analista de datos de soporte técnico. Analiza los datos de tickets proporcionados y genera insights estructurados para las siguientes funcionalidades:
 
-1. Average Resolution Time - Análisis del tiempo promedio de resolución
-2. Category Distribution - Distribución de tickets por categorías
-3. Costs per Category - Análisis de costos por categoría
-4. Identified Root Causes - Causas raíz identificadas
-5. Predictive Analysis - Análisis predictivo basado en patrones
-6. Performance Metrics - Métricas de rendimiento del equipo
+1. Identified Root Causes - Causas raíz identificadas
+2. Predictive Analysis - Análisis predictivo basado en patrones
+
+IMPORTANTE: Para cada root cause identificada, debes generar recomendaciones específicas y detalladas basadas en el análisis de los datos. Las recomendaciones deben ser prácticas, accionables y específicas para cada causa raíz.
 
 Responde en formato JSON estructurado con el siguiente esquema:
 {
-  "averageResolutionTime": {
-    "currentAverage": number,
-    "trend": "string",
-    "recommendations": ["string"],
-    "analysis": "string"
-  },
-  "categoryDistribution": {
-    "distribution": [{"category": "string", "count": number, "percentage": number}],
-    "topCategories": ["string"],
-    "analysis": "string",
-    "recommendations": ["string"]
-  },
-  "costsPerCategory": {
-    "costs": [{"category": "string", "totalCost": number, "averageCost": number}],
-    "totalCost": number,
-    "analysis": "string",
-    "recommendations": ["string"]
-  },
   "identifiedRootCauses": {
-    "rootCauses": [{"cause": "string", "frequency": number, "impact": "string", "recommendations": ["string"]}],
+    "rootCauses": [{"cause": "string", "frequency": number, "impact": "string"}],
+    "recommendations": ["string"],
     "analysis": "string"
   },
   "predictiveAnalysis": {
@@ -66,14 +47,6 @@ Responde en formato JSON estructurado con el siguiente esquema:
     "resourceOptimization": ["string"],
     "riskFactors": ["string"],
     "analysis": "string"
-  },
-  "performanceMetrics": {
-    "slaCompliance": number,
-    "customerSatisfaction": number,
-    "reopenedTickets": number,
-    "teamEfficiency": number,
-    "analysis": "string",
-    "recommendations": ["string"]
   }
 }`
 
