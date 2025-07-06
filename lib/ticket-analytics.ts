@@ -58,7 +58,7 @@ export class TicketAnalytics {
   }
 
   static detectSimilarTickets(tickets: Ticket[], timeWindowHours = 2) {
-    const alerts = []
+    const alerts: { type: string; service: string; category: string; count: number; tickets: string[] }[] = []
     const now = new Date()
 
     // Agrupar tickets por servicio y descripción similar

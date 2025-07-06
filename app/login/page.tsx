@@ -6,8 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Eye, EyeOff, Brain, Lock } from "lucide-react"
+import { Eye, EyeOff, Brain } from "lucide-react"
 import { toast } from "sonner"
 
 export default function LoginPage() {
@@ -15,13 +14,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError("")
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -38,11 +35,9 @@ export default function LoginPage() {
         toast.success('¡Inicio de sesión exitoso!')
         router.push('/')
       } else {
-        setError(data.error || 'Error al iniciar sesión')
         toast.error(data.error || 'Error al iniciar sesión')
       }
-    } catch (error) {
-      setError('Error de conexión. Intentá de nuevo.')
+    } catch {
       toast.error('Error de conexión. Intentá de nuevo.')
     } finally {
       setIsLoading(false)
@@ -71,12 +66,6 @@ export default function LoginPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
-              {error && (
-                <Alert variant="destructive">
-                  <Lock className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
 
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>

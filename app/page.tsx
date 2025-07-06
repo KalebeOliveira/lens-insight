@@ -209,7 +209,7 @@ const calculateResolutionTimeData = (tickets: Ticket[]) => {
     .sort()
     .slice(-6) // Últimos 6 meses
     .map(monthKey => {
-      const [year, month] = monthKey.split('-')
+      const [, month] = monthKey.split('-')
       const monthIndex = parseInt(month) - 1
       const avgTime = monthlyData[monthKey].total / monthlyData[monthKey].count
       
@@ -233,7 +233,7 @@ export default function TicketAnalyticsApp() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [aiInsights, setAiInsights] = useState<AIInsights | null>(null)
   const [isGeneratingInsights, setIsGeneratingInsights] = useState(false)
-  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null)
+  // const [user] = useState<{ name: string; email: string; role: string } | null>(null)
 
   // Verificar se a API key está configurada
   useEffect(() => {
@@ -248,7 +248,7 @@ export default function TicketAnalyticsApp() {
             duration: 8000,
           })
         }
-      } catch (error) {
+      } catch {
         // Silenciar erro de verificação inicial
       }
     }
@@ -445,7 +445,7 @@ export default function TicketAnalyticsApp() {
       } else {
         toast.error('Error al cerrar sesión')
       }
-    } catch (error) {
+    } catch {
       toast.error('Error al cerrar sesión')
     }
   }

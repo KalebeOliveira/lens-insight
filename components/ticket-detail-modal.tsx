@@ -6,7 +6,46 @@ import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface TicketDetailModalProps {
-  ticket: any
+  ticket: {
+    id: string
+    parentServiceRequest: string
+    status: string
+    user: string
+    contactType: string
+    service: string
+    configurationItem: string
+    category: string
+    subCategory: string
+    causedByChange: string
+    impact: string
+    urgency: string
+    assignmentGroup: string
+    assignedTo: string
+    itCrisis: string
+    supplier: string
+    externalReference: string
+    shortDescription: string
+    description: string
+    closeCode: string
+    closureNotes: string
+    workNotes: string
+    additionalComments: string
+    opened: string
+    openedBy: string
+    resolved: string
+    resolvedBy: string
+    watchList: string
+    correlationId: string
+    sapImplementationStatus: string
+    followUp: string
+    threeStrikeRule: string
+    dueDate: string
+    reasonForWaiting: string
+    actionsTaken: string
+    active: string
+    resolutionTime: number
+    cost: number
+  }
   open: boolean
   onOpenChange: (open: boolean) => void
 }

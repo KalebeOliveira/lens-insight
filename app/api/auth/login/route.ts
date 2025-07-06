@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 // Credenciais mockadas
 const MOCK_USERS = [
@@ -45,7 +44,11 @@ export async function POST(request: NextRequest) {
     const sessionToken = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     
     // Retornar dados do usuário (sem senha)
-    const { password: _, ...userWithoutPassword } = user
+    const userWithoutPassword = {
+      email: user.email,
+      name: user.name,
+      role: user.role
+    }
 
     // Definir cookie de sessão
     const response = NextResponse.json({
