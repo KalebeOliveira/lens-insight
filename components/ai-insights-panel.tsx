@@ -23,8 +23,8 @@ export interface AIInsights {
       cause: string
       frequency: number
       impact: string
+      recommendations: string[]
     }>
-    recommendations: string[]
     analysis: string
   }
   predictiveAnalysis: {
@@ -128,25 +128,23 @@ export function AIInsightsPanel({ insights, isLoading, onGenerateInsights }: AII
                             </Badge>
                           </div>
                         </div>
+                        <div>
+                          <h6 className="font-medium text-sm mb-1">Recomendaciones:</h6>
+                          <ul className="space-y-1">
+                            {cause.recommendations.map((rec, recIndex) => (
+                              <li key={recIndex} className="flex items-start gap-2 text-sm">
+                                <Zap className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                                <span>{rec}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="font-semibold mb-2 flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4" />
-                    Recomendaciones
-                  </h4>
-                  <ul className="space-y-2">
-                    {insights.identifiedRootCauses.recommendations.map((rec: string, recIndex: number) => (
-                      <li key={recIndex} className="flex items-start gap-2 text-sm">
-                        <Zap className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
-                        <span>{rec}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+
               </CardContent>
             </Card>
           </TabsContent>

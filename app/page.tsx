@@ -513,7 +513,6 @@ export default function TicketAnalyticsApp() {
                 Importar CSV
               </label>
             </Button>
-            <Button>Exportar Reporte</Button>
             <Button 
               variant="outline" 
               onClick={handleLogout}

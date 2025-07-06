@@ -48,8 +48,8 @@ export interface AIInsights {
       cause: string
       frequency: number
       impact: string
+      recommendations: string[]
     }>
-    recommendations: string[]
     analysis: string
   }
   predictiveAnalysis: {
